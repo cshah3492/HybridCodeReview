@@ -1,0 +1,13 @@
+bugType,className,methodName,groundTruth,llmPrediction,confidence,result
+"RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT","com.sample.Main","main","False Positive","True Positive",0.9,"False Positive (FP)"
+"ES_COMPARING_PARAMETER_STRING_WITH_EQ","com.sample.repository.EmployeeRepository","findByDepartment","True Positive","True Positive",0.9,"True Positive (TP)"
+"ES_COMPARING_PARAMETER_STRING_WITH_EQ","com.sample.service.AuthenticationService","authenticate","True Positive","True Positive",0.9,"True Positive (TP)"
+"ES_COMPARING_PARAMETER_STRING_WITH_EQ","com.sample.service.AuthenticationService","weakPasswordCheck","True Positive","True Positive",0.95,"True Positive (TP)"
+"ES_COMPARING_PARAMETER_STRING_WITH_EQ","com.sample.service.EmployeeService","belongsToDepartment","True Positive","True Positive",0.95,"True Positive (TP)"
+"DM_DEFAULT_ENCODING","com.sample.service.ReportService","generateEmployeeReport","False Positive","True Positive",0.9,"False Positive (FP)"
+"OBL_UNSATISFIED_OBLIGATION","com.sample.service.ReportService","generateEmployeeReport","True Positive","True Positive",0.9,"True Positive (TP)"
+"OS_OPEN_STREAM","com.sample.service.ReportService","generateEmployeeReport","True Positive","True Positive",0.9,"True Positive (TP)"
+"DM_DEFAULT_ENCODING","com.sample.util.FileUtil","readFirstLine","False Positive","True Positive",0.9,"False Positive (FP)"
+"ES_COMPARING_STRINGS_WITH_EQ","com.sample.util.FileUtil","isCsvFile","True Positive","True Positive",0.9,"True Positive (TP)"
+"OS_OPEN_STREAM","com.sample.util.FileUtil","readFirstLine","True Positive","True Positive",0.9,"True Positive (TP)"
+"RV_RETURN_VALUE_IGNORED","com.sample.util.FileUtil","normalizeInput","True Positive","True Positive",0.9,"True Positive (TP)"

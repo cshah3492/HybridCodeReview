@@ -1,0 +1,17 @@
+Hybrid Code Review Prototype Report
+===================================
+
+Total SpotBugs Findings: 12
+
+Finding{bugType='RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT', className='com.sample.Main', methodName='main', line=9, message='Return value of method without side effect is ignored'}
+Finding{bugType='ES_COMPARING_PARAMETER_STRING_WITH_EQ', className='com.sample.repository.EmployeeRepository', methodName='findByDepartment', line=8, message='Comparison of String parameter using == or !='}
+Finding{bugType='ES_COMPARING_PARAMETER_STRING_WITH_EQ', className='com.sample.service.AuthenticationService', methodName='authenticate', line=6, message='Comparison of String parameter using == or !='}
+Finding{bugType='ES_COMPARING_PARAMETER_STRING_WITH_EQ', className='com.sample.service.AuthenticationService', methodName='weakPasswordCheck', line=6, message='Comparison of String parameter using == or !='}
+Finding{bugType='ES_COMPARING_PARAMETER_STRING_WITH_EQ', className='com.sample.service.EmployeeService', methodName='belongsToDepartment', line=8, message='Comparison of String parameter using == or !='}
+Finding{bugType='DM_DEFAULT_ENCODING', className='com.sample.service.ReportService', methodName='generateEmployeeReport', line=8, message='Reliance on default encoding'}
+Finding{bugType='OBL_UNSATISFIED_OBLIGATION', className='com.sample.service.ReportService', methodName='generateEmployeeReport', line=8, message='Method may fail to clean up stream or resource'}
+Finding{bugType='OS_OPEN_STREAM', className='com.sample.service.ReportService', methodName='generateEmployeeReport', line=8, message='Method may fail to close stream'}
+Finding{bugType='DM_DEFAULT_ENCODING', className='com.sample.util.FileUtil', methodName='readFirstLine', line=7, message='Reliance on default encoding'}
+Finding{bugType='ES_COMPARING_STRINGS_WITH_EQ', className='com.sample.util.FileUtil', methodName='isCsvFile', line=7, message='Comparison of String objects using == or !='}
+Finding{bugType='OS_OPEN_STREAM', className='com.sample.util.FileUtil', methodName='readFirstLine', line=7, message='Method may fail to close stream'}
+Finding{bugType='RV_RETURN_VALUE_IGNORED', className='com.sample.util.FileUtil', methodName='normalizeInput', line=7, message='Method ignores return value'}

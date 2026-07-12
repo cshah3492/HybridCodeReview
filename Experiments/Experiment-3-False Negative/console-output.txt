@@ -1,0 +1,81 @@
+Hybrid Code Review Prototype Started
+Findings found: 3
+
+===== STATIC FINDING =====
+Finding{bugType='ES_COMPARING_PARAMETER_STRING_WITH_EQ', className='com.sample.BuggyExample', methodName='compareStrings', line=6, message='Comparison of String parameter using == or !='}
+Jul 04, 2026 1:35:30 AM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=U4M361lNHR_6M6hHCx_azy0P4K0sZD7OcI5L.6U31gI-1783143329.7090585-1.0.1.1-BPE4bNPgCEpXPdqDVzMm8MeNFO7l41aKtqmRbdTAMfUznQKw4x8QPnQYHblnH.5BTZlH2iUJQufBs4qDwh0lSvUN22_f3.oMLP4uAPr1SXITiKmi.eE2b4FSdBVoUsG0; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 04 Jul 2026 06:05:31 GMT". Invalid 'expires' attribute: Sat, 04 Jul 2026 06:05:31 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that the code is using '==' or '!=' to compare String parameters, which checks for reference equality rather than value equality. This is a common mistake in Java, as it can lead to unexpected behavior when comparing String values.
+Recommendation : Replace '==' or '!=' with '.equals()' or '.equalsIgnoreCase()' for String comparison to ensure value equality.
+
+===== STATIC FINDING =====
+Finding{bugType='OBL_UNSATISFIED_OBLIGATION', className='com.sample.BuggyExample', methodName='openFile', line=6, message='Method may fail to clean up stream or resource'}
+Jul 04, 2026 1:35:33 AM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=Kmak40RDYzUdSXawRfi88Kf1ob0cakdr2tuSxTiTVvM-1783143331.1882048-1.0.1.1-40hx7MSK4y35X6Sgx1jywTyEWXW1WDH.E4DNWnkwHyN0Q_Vi7ALZZ0B_Zagtq89ZUFXRmGFy6rNXqGyNNBNgPl6qhPOtM.mYI0iQdV9e2DcFe18F_lyELJgzCXu39jJ4; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 04 Jul 2026 06:05:33 GMT". Invalid 'expires' attribute: Sat, 04 Jul 2026 06:05:33 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The method 'openFile' likely opens a resource (like a file stream) without ensuring it is properly closed, which can lead to resource leaks. This is a common issue in Java when using I/O operations.
+Recommendation : Use a try-with-resources statement to ensure that the stream or resource is automatically closed after use, or explicitly close the resource in a finally block.
+
+===== STATIC FINDING =====
+Finding{bugType='OS_OPEN_STREAM', className='com.sample.BuggyExample', methodName='openFile', line=6, message='Method may fail to close stream'}
+Jul 04, 2026 1:35:34 AM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=e4XpvZ2PWPQAaggbYSuzB2HCAZpihVprpFmYGyNQQWo-1783143333.4005525-1.0.1.1-02bXp24snqcCUsyNDFyJufPWRt3mOCdgcwGi8mVQp43kWAYIiXj9.xAv1qGY6wWQAqtEQto15lFQeajbCpKcDUG6Cm5VchH_jvN_CkwzwU8f0Upb7Y3AQPAl2XsGm1Oc; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 04 Jul 2026 06:05:35 GMT". Invalid 'expires' attribute: Sat, 04 Jul 2026 06:05:35 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : False Positive
+Evaluation     : False Negative (FN)
+Classification : False Positive
+Confidence     : 0.9
+Reasoning      : The method openFile likely opens a stream without ensuring it is closed, which can lead to resource leaks. This is a common issue in Java when using streams.
+Recommendation : Use a try-with-resources statement to ensure the stream is closed automatically, or explicitly close the stream in a finally block.
+Report generated: prototype-report.txt
+CSV report generated: prototype-evaluation.csv
+
+===== EVALUATION METRICS =====
+TP: 2
+FP: 0
+FN: 1
+Precision: 100.00%
+Recall: 66.67%
+F1-Score: 80.00%
+
+===== FEEDBACK LEARNING STATISTICS =====
+Total Findings Analyzed: 3
+Developer Feedback Records: 3
+Findings Reusing Prior Feedback: 0
+Feedback Reuse Rate: 0.00%
+
+===== PERFORMANCE METRICS =====
+SpotBugs Analysis Time : 25 ms
+Average LLM Latency    : 2019 ms
+Total Execution Time   : 6147 ms
+
+===== LLM TOKEN USAGE =====
+Prompt Tokens     : 460
+Completion Tokens : 301
+Total Tokens      : 761
+Estimated Cost    : $0.000250
+
+===== PROTOTYPE SUMMARY =====
+Prototype Language       : Java 8
+Static Analyzer          : SpotBugs
+LLM Model                : gpt-4o-mini
+Feedback Storage         : feedback.json
+Ground Truth Source      : ground-truth.csv
+Evaluation Output        : prototype-evaluation.csv
+
+Hybrid Code Review Prototype Completed

@@ -1,0 +1,8 @@
+Hybrid Code Review Prototype Report
+===================================
+
+Total SpotBugs Findings: 3
+
+Finding{bugType='ES_COMPARING_PARAMETER_STRING_WITH_EQ', className='com.sample.BuggyExample', methodName='compareStrings', line=6, message='Comparison of String parameter using == or !='}
+Finding{bugType='OBL_UNSATISFIED_OBLIGATION', className='com.sample.BuggyExample', methodName='openFile', line=6, message='Method may fail to clean up stream or resource'}
+Finding{bugType='OS_OPEN_STREAM', className='com.sample.BuggyExample', methodName='openFile', line=6, message='Method may fail to close stream'}

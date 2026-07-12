@@ -1,0 +1,207 @@
+Hybrid Code Review Prototype Started
+Findings found: 12
+
+===== STATIC FINDING =====
+Finding{bugType='RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT', className='com.sample.Main', methodName='main', line=9, message='Return value of method without side effect is ignored'}
+Jul 10, 2026 9:40:23 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=0IUnEYEWW6IGoHbd5PBMc.7g6Id0bagIe7daN2Hylcw-1783734022.0283124-1.0.1.1-ZWn5Jg.2ZqN8ujTw3FhDdPOz0aBknn8PnuIYEsxE3rLcb1J9E2UQ2d353m2XJJgJoZbwoPCCHCPyU.0tsIKgu5abIoJX9PSmMWq28NuV.XR1teoVpuLMzEHj9yfcHFEA; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 02:10:23 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 02:10:23 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : False Positive
+LLM Prediction : True Positive
+Evaluation     : False Positive (FP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The static analyzer indicates that a method is being called whose return value is ignored, and it has no side effects. This suggests that the return value may contain important information that should be handled or logged, which is a common oversight in coding practices.
+Recommendation : Review the method call in the main method and either use the return value appropriately (e.g., store it in a variable, log it, or handle it) or if it is truly unnecessary, consider removing the method call.
+
+===== STATIC FINDING =====
+Finding{bugType='ES_COMPARING_PARAMETER_STRING_WITH_EQ', className='com.sample.repository.EmployeeRepository', methodName='findByDepartment', line=8, message='Comparison of String parameter using == or !='}
+Jul 10, 2026 9:40:27 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=oEVeVGyq81qdmQGqzB38oNvu4uloJczuZ9CYCMtN8Lw-1783734024.0224788-1.0.1.1-VM.TXNjAX5wgUZlO7rY2KH88bV3cFBSUl.tpC3uNPd.kwMLT8CCfoIcZri.97WARI3U0RHAOWCBmmhAGE9_hKim2FnXrVRkUVacm3vz8fUSK1BCTku3yqdidgXMQw04Q; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 02:10:27 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 02:10:27 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The comparison of String parameters using '==' or '!=' checks for reference equality rather than value equality, which is not the intended behavior when comparing Strings in Java.
+Recommendation : Use the '.equals()' method for String comparison instead of '==' or '!='.
+
+===== STATIC FINDING =====
+Finding{bugType='ES_COMPARING_PARAMETER_STRING_WITH_EQ', className='com.sample.service.AuthenticationService', methodName='authenticate', line=6, message='Comparison of String parameter using == or !='}
+Jul 10, 2026 9:40:28 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=ApgwRvRytbsQk0o6dObt5rBKlfvlma6qqVoDMT0EuHo-1783734027.142019-1.0.1.1-BFZbOSpqn8yp1LJmnHBUj5d2P3QqdYzxotghM9cC7rVCnTHd4R7TsFYnkxiUsFU3JWvXkD5Vt_hef4OoaVx0JfgcIWcnridTLI_BKPyCqx8DbFlONJtgDxpXnTRE4990; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 02:10:28 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 02:10:28 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that a String parameter is being compared using '==' or '!=' instead of the correct method 'equals()'. This is a common mistake in Java, as '==' checks for reference equality rather than value equality, which can lead to unexpected behavior when comparing String objects.
+Recommendation : Replace the '==' or '!=' comparison with the 'equals()' method to ensure proper value comparison, e.g., use 'param.equals(otherString)' instead of 'param == otherString'.
+
+===== STATIC FINDING =====
+Finding{bugType='ES_COMPARING_PARAMETER_STRING_WITH_EQ', className='com.sample.service.AuthenticationService', methodName='weakPasswordCheck', line=6, message='Comparison of String parameter using == or !='}
+Jul 10, 2026 9:40:30 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=p_QZXInfnuhhDNW7Dch6iHhrmRGF9zE4AIzmWR3RM0c-1783734029.0373957-1.0.1.1-AsRIrQgtH8rpVzabNUGXm2cTMxsaJ_7igQWamlWo1pcn1Su_GXCEBNLKMulRPvAsR1xUAODsWHXsVyoeZQXYjBNb0JUssxu6BMyvHW8AZufoxOCbgUEWr5a.HPbxloj9; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 02:10:30 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 02:10:30 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 1.0
+Reasoning      : The finding indicates that a String parameter is being compared using '==' or '!=' instead of the correct method 'equals()'. This is a common mistake in Java that can lead to unexpected behavior since '==' checks for reference equality, not value equality.
+Recommendation : Replace the '==' or '!=' comparison with the 'equals()' method to properly compare the String values.
+
+===== STATIC FINDING =====
+Finding{bugType='ES_COMPARING_PARAMETER_STRING_WITH_EQ', className='com.sample.service.EmployeeService', methodName='belongsToDepartment', line=8, message='Comparison of String parameter using == or !='}
+Jul 10, 2026 9:40:32 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=qeFbVKK3iUTYTbCQ9TNi6M8v.hj8lpSj4gl8xhLJVyw-1783734030.8469975-1.0.1.1-eNSclg48XNne3StkTfaKIWgcyTvkSIMXLlqvPtkfVbmcztj7z6YBmzDj1o24dylEXhFxyrpxs0xyT32buaHJhYXSWS63xCZAIYodNSOdLu7.T6ZNhDMzWSYTdcICHQtY; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 02:10:32 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 02:10:32 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.95
+Reasoning      : The finding indicates that a String parameter is being compared using '==' or '!=' instead of the 'equals()' method, which is a common mistake in Java that can lead to incorrect behavior when comparing string values.
+Recommendation : Replace the '==' or '!=' comparison with the 'equals()' method to properly compare the content of the strings.
+
+===== STATIC FINDING =====
+Finding{bugType='DM_DEFAULT_ENCODING', className='com.sample.service.ReportService', methodName='generateEmployeeReport', line=8, message='Reliance on default encoding'}
+Jul 10, 2026 9:40:33 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=mGDhK1A.My6Oq09psMs0yQrZvWKYi6iHyWaLd8JgKB4-1783734032.4920685-1.0.1.1-gqOIJgd4IHka0.Yd6EcyZFAb28SjS.aD.T6awXfJ7uPvplTLojvTLHAhCK32p5tm5cF1sJ3md_Lrq7asxD7dnN7sOVrwOMWeZITLgk2uYkDOMbxomTT2M1p0JHz0v3Rs; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 02:10:33 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 02:10:33 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : False Positive
+LLM Prediction : True Positive
+Evaluation     : False Positive (FP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The use of default encoding can lead to inconsistent behavior across different environments, as it relies on the system's default character set, which may vary. This can cause issues when reading or writing files, especially in a globalized application.
+Recommendation : Specify the character encoding explicitly when performing I/O operations, such as using UTF-8, to ensure consistent behavior across all environments.
+
+===== STATIC FINDING =====
+Finding{bugType='OBL_UNSATISFIED_OBLIGATION', className='com.sample.service.ReportService', methodName='generateEmployeeReport', line=8, message='Method may fail to clean up stream or resource'}
+Jul 10, 2026 9:40:35 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=hg47CAXxZPymkjIXKUp00MztOmqEc50.suHo0gEb15k-1783734033.9598346-1.0.1.1-hQZElvTG7hP7y9GQlUOb5Ks7CG_mcvUXIq3p1nyieo4kiz4eYjw42VUPEk9PUBg0YUlA4Mn.CQcEyw5Na0NZCqQZ0iPnS7MVBrZ6x2MPZmbT3Pq0sAmHtxMq7hROzXAq; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 02:10:35 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 02:10:35 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The method generateEmployeeReport likely involves resource management, such as file streams or database connections, which need to be properly closed to avoid resource leaks. If these resources are not closed, it can lead to memory leaks or other resource exhaustion issues.
+Recommendation : Ensure that all streams or resources are closed in a finally block or use try-with-resources to automatically manage resource closure.
+
+===== STATIC FINDING =====
+Finding{bugType='OS_OPEN_STREAM', className='com.sample.service.ReportService', methodName='generateEmployeeReport', line=8, message='Method may fail to close stream'}
+Jul 10, 2026 9:40:36 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=AL2BEgFkUv0OfZSu4FYKS0h_kVDekHzSssd1koVJlH4-1783734035.4771125-1.0.1.1-n79Cn8hhvyb.1GFp9LiiujM7J2wFgRWfpkgrAJIn5u4m_JyCEk_JCKslUoTRrxIeVqD3TwMXWrT_x7.0JfbW5p42fQGooTMo_172GJq2FoMcPrG4xNHq.8Vz7IhVXGgD; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 02:10:36 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 02:10:36 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The method generateEmployeeReport likely opens a stream for file or data processing without ensuring it is closed, which can lead to resource leaks and potential file locks.
+Recommendation : Use a try-with-resources statement to automatically close the stream after use, or ensure that the stream is closed in a finally block.
+
+===== STATIC FINDING =====
+Finding{bugType='DM_DEFAULT_ENCODING', className='com.sample.util.FileUtil', methodName='readFirstLine', line=7, message='Reliance on default encoding'}
+Jul 10, 2026 9:40:38 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=yPgd5QXNOPfLe3zCbE0YVSI00mZFvFy46GnSo0Gvq74-1783734036.8269243-1.0.1.1-icGzUc8krKmfLkgRsiPqRv8LfAhQgnnUrbAMy5PiwbIR_B_H84hJlaG2IAYkR15c_uitnuBncV_frGltO7Wc._D.VF_mtW526A06x0Fqm1BIkoetOC4ps1CwtsJvy0hd; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 02:10:38 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 02:10:38 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : False Positive
+LLM Prediction : True Positive
+Evaluation     : False Positive (FP)
+Classification : True Positive
+Confidence     : 0.95
+Reasoning      : The use of default encoding can lead to inconsistent behavior across different environments, especially if the system's default encoding changes. This can cause issues when reading files that may not be encoded in the default charset.
+Recommendation : Specify a charset explicitly when reading files, such as using `Files.readAllLines(path, StandardCharsets.UTF_8)` to ensure consistent behavior regardless of the system's default encoding.
+
+===== STATIC FINDING =====
+Finding{bugType='ES_COMPARING_STRINGS_WITH_EQ', className='com.sample.util.FileUtil', methodName='isCsvFile', line=7, message='Comparison of String objects using == or !='}
+Jul 10, 2026 9:40:40 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=RgUhvyQpBFt.u5jgLURU3fyNNtQsV_4z3sY.6KVy0dw-1783734038.669893-1.0.1.1-jKz8TplEZm1dAqMidQABub1xoWYSmCWOLYukt_ZT9R4xjiOrCiRTbvaqLq4uYvfqdUUAj46gRkqyWyPXS2bP_CVBwGMJ6AqnOtTl9L90DanAMlIjuQZHdIiQGqiBtPmA; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 02:10:40 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 02:10:40 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The use of '==' or '!=' for String comparison in Java checks for reference equality rather than value equality, which is likely not the intended behavior when comparing strings.
+Recommendation : Replace '==' or '!=' with '.equals()' or '.equalsIgnoreCase()' for proper String value comparison.
+
+===== STATIC FINDING =====
+Finding{bugType='OS_OPEN_STREAM', className='com.sample.util.FileUtil', methodName='readFirstLine', line=7, message='Method may fail to close stream'}
+Jul 10, 2026 9:40:41 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=eRZl1coT5aJLEkRCIwUePqYGUp.nnYlKZFEPoPVJHA4-1783734040.3962824-1.0.1.1-Zc_1CmCluC.bXTp_74eQxUeASZWILaeGBoBRUDL3_g6_gmxiMAe0HDJycZoIZBBqODRH4y9Lk7UjT3p7AO4QZ0kGH9d8CvZQPYsf.xBAs6DiiWUwZJfZXgfNJGHT_hlv; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 02:10:41 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 02:10:41 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The method readFirstLine may open a stream without ensuring it is closed, which can lead to resource leaks. Given that a similar finding was previously accepted as a true positive, it indicates a pattern of concern in this codebase.
+Recommendation : Use a try-with-resources statement to ensure the stream is closed automatically after use, or explicitly close the stream in a finally block.
+
+===== STATIC FINDING =====
+Finding{bugType='RV_RETURN_VALUE_IGNORED', className='com.sample.util.FileUtil', methodName='normalizeInput', line=7, message='Method ignores return value'}
+Jul 10, 2026 9:40:43 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=RKRnr5Nm_Vtpay6inEwTY44cYOn09sEJuFqoN9xbzP8-1783734041.8154294-1.0.1.1-9J0Hq6sEyCeXCPGgPSvXNeGPYzg4DJobNCs1RKZpOqKoBWRp0X8ocRurgoVhHGwXYx76O._b0CTIMNFlBBe18PIqnkjITuj27jBXd7xtVU1CLCRAKDngILeRwV1ZiEFB; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 02:10:43 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 02:10:43 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The method normalizeInput likely returns a value that is essential for further processing or validation, and ignoring it could lead to incorrect behavior or data integrity issues.
+Recommendation : Ensure that the return value of normalizeInput is used appropriately in the calling code, or if it is intentionally ignored, consider documenting this decision to clarify the intent.
+Report generated: prototype-report.txt
+CSV report generated: prototype-evaluation.csv
+
+===== EVALUATION METRICS =====
+TP: 9
+FP: 3
+FN: 0
+Precision: 75.00%
+Recall: 100.00%
+F1-Score: 85.71%
+
+===== FEEDBACK LEARNING STATISTICS =====
+Total Findings Analyzed: 12
+Developer Feedback Records: 12
+Findings Reusing Prior Feedback: 5
+Feedback Reuse Rate: 41.67%
+
+===== PERFORMANCE METRICS =====
+SpotBugs Analysis Time : 40 ms
+Average LLM Latency    : 1808 ms
+Total Execution Time   : 21858 ms
+
+===== LLM TOKEN USAGE =====
+Prompt Tokens     : 2055
+Completion Tokens : 1233
+Total Tokens      : 3288
+Estimated Cost    : $0.001048
+
+===== PROTOTYPE SUMMARY =====
+Prototype Language       : Java 8
+Static Analyzer          : SpotBugs
+LLM Model                : gpt-4o-mini
+Feedback Storage         : feedback.json
+Ground Truth Source      : ground-truth-v2.csv
+Evaluation Output        : prototype-evaluation.csv
+
+Hybrid Code Review Prototype Completed

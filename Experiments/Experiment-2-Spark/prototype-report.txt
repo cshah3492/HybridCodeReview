@@ -1,0 +1,46 @@
+Hybrid Code Review Prototype Report
+===================================
+
+Total SpotBugs Findings: 41
+
+Finding{bugType='MS_EXPOSE_REP', className='spark.ExceptionMapper', methodName='getInstance', line=34, message='Public static method may expose internal representation by returning a mutable object or array'}
+Finding{bugType='SING_SINGLETON_HAS_NONPRIVATE_CONSTRUCTOR', className='spark.ExceptionMapper', methodName='<init>', line=34, message='Class using singleton design pattern has non-private constructor.'}
+Finding{bugType='CT_CONSTRUCTOR_THROW', className='spark.QueryParamsMap', methodName='<init>', line=34, message='Be wary of letting constructors throw exceptions.'}
+Finding{bugType='NP_BOOLEAN_RETURN_NULL', className='spark.QueryParamsMap', methodName='booleanValue', line=34, message='Method with Boolean return type returns explicit null'}
+Finding{bugType='EI_EXPOSE_REP', className='spark.Request', methodName='bodyAsBytes', line=48, message='May expose internal representation by returning reference to mutable object'}
+Finding{bugType='EI_EXPOSE_REP', className='spark.Request', methodName='headers', line=48, message='May expose internal representation by returning reference to mutable object'}
+Finding{bugType='EI_EXPOSE_REP', className='spark.Request', methodName='session', line=48, message='May expose internal representation by returning reference to mutable object'}
+Finding{bugType='EI_EXPOSE_REP', className='spark.Request', methodName='session', line=48, message='May expose internal representation by returning reference to mutable object'}
+Finding{bugType='EI_EXPOSE_REP', className='spark.Response', methodName='raw', line=37, message='May expose internal representation by returning reference to mutable object'}
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Finding{bugType='EI_EXPOSE_REP2', className='spark.Service$StaticFiles', methodName='<init>', line=626, message='May expose internal representation by incorporating reference to mutable object'}
+Finding{bugType='EI_EXPOSE_REP', className='spark.Session', methodName='raw', line=26, message='May expose internal representation by returning reference to mutable object'}
+Finding{bugType='DM_EXIT', className='spark.embeddedserver.jetty.EmbeddedJettyServer', methodName='extinguish', line=55, message='Method invokes System.exit(...)'}
+Finding{bugType='EI_EXPOSE_REP2', className='spark.embeddedserver.jetty.EmbeddedJettyServer', methodName='<init>', line=55, message='May expose internal representation by incorporating reference to mutable object'}
+Finding{bugType='EI_EXPOSE_REP2', className='spark.embeddedserver.jetty.EmbeddedJettyServer', methodName='configureWebSockets', line=55, message='May expose internal representation by incorporating reference to mutable object'}
+Finding{bugType='RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE', className='spark.embeddedserver.jetty.EmbeddedJettyServer', methodName='ignite', line=55, message='Redundant nullcheck of value known to be non-null'}
+Finding{bugType='WMI_WRONG_MAP_ITERATOR', className='spark.embeddedserver.jetty.websocket.WebSocketServletContextHandlerFactory', methodName='create', line=33, message='Inefficient use of keySet iterator instead of entrySet iterator'}
+Finding{bugType='EI_EXPOSE_REP2', className='spark.http.matching.MatcherFilter', methodName='<init>', line=46, message='May expose internal representation by incorporating reference to mutable object'}
+Finding{bugType='EI_EXPOSE_REP2', className='spark.http.matching.MatcherFilter', methodName='<init>', line=46, message='May expose internal representation by incorporating reference to mutable object'}
+Finding{bugType='SF_SWITCH_NO_DEFAULT', className='spark.resource.UriPath', methodName='canonical', line=22, message='Switch statement found where default case is missing'}
+Finding{bugType='NP_LOAD_OF_KNOWN_NULL_VALUE', className='spark.route.Routes', methodName='findMultiple', line=39, message='Load of known null value'}
+Finding{bugType='MS_EXPOSE_REP', className='spark.route.ServletRoutes', methodName='get', line=27, message='Public static method may expose internal representation by returning a mutable object or array'}
+Finding{bugType='EI_EXPOSE_REP2', className='spark.serialization.Serializer', methodName='setNext', line=27, message='May expose internal representation by incorporating reference to mutable object'}
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.staticfiles.StaticFilesConfiguration', methodName='null', line=47, message='Inconsistent synchronization'}
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.staticfiles.StaticFilesConfiguration', methodName='null', line=47, message='Inconsistent synchronization'}
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.staticfiles.StaticFilesConfiguration', methodName='null', line=47, message='Inconsistent synchronization'}
+Finding{bugType='MS_SHOULD_BE_FINAL', className='spark.staticfiles.StaticFilesConfiguration', methodName='null', line=47, message='Field isn't final but should be'}
+Finding{bugType='DM_DEFAULT_ENCODING', className='spark.utils.IOUtils', methodName='copy', line=81, message='Reliance on default encoding'}
+Finding{bugType='CO_COMPARETO_INCORRECT_FLOATING', className='spark.utils.MimeParse$FitnessAndQuality', methodName='compareTo', line=103, message='compareTo()/compare() incorrectly handles float or double value'}
+Finding{bugType='EQ_COMPARETO_USE_OBJECT_EQUALS', className='spark.utils.MimeParse$FitnessAndQuality', methodName='compareTo', line=103, message='Class defines compareTo(...) and uses Object.equals()'}
+Finding{bugType='WMI_WRONG_MAP_ITERATOR', className='spark.utils.MimeParse$ParseResults', methodName='toString', line=23, message='Inefficient use of keySet iterator instead of entrySet iterator'}
+Finding{bugType='DM_DEFAULT_ENCODING', className='spark.utils.StringUtils', methodName='toString', line=45, message='Reliance on default encoding'}
+Finding{bugType='EI_EXPOSE_REP2', className='spark.utils.urldecoding.Utf8StringBuilder', methodName='<init>', line=38, message='May expose internal representation by incorporating reference to mutable object'}

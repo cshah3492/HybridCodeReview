@@ -1,0 +1,97 @@
+[ {
+  "bugType" : "RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT",
+  "className" : "com.sample.Main",
+  "methodName" : "main",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "ES_COMPARING_PARAMETER_STRING_WITH_EQ",
+  "className" : "com.sample.repository.EmployeeRepository",
+  "methodName" : "findByDepartment",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "ES_COMPARING_PARAMETER_STRING_WITH_EQ",
+  "className" : "com.sample.service.AuthenticationService",
+  "methodName" : "authenticate",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "ES_COMPARING_PARAMETER_STRING_WITH_EQ",
+  "className" : "com.sample.service.AuthenticationService",
+  "methodName" : "weakPasswordCheck",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.95,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "ES_COMPARING_PARAMETER_STRING_WITH_EQ",
+  "className" : "com.sample.service.EmployeeService",
+  "methodName" : "belongsToDepartment",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.95,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "DM_DEFAULT_ENCODING",
+  "className" : "com.sample.service.ReportService",
+  "methodName" : "generateEmployeeReport",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "OBL_UNSATISFIED_OBLIGATION",
+  "className" : "com.sample.service.ReportService",
+  "methodName" : "generateEmployeeReport",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "OS_OPEN_STREAM",
+  "className" : "com.sample.service.ReportService",
+  "methodName" : "generateEmployeeReport",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "DM_DEFAULT_ENCODING",
+  "className" : "com.sample.util.FileUtil",
+  "methodName" : "readFirstLine",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "ES_COMPARING_STRINGS_WITH_EQ",
+  "className" : "com.sample.util.FileUtil",
+  "methodName" : "isCsvFile",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "OS_OPEN_STREAM",
+  "className" : "com.sample.util.FileUtil",
+  "methodName" : "readFirstLine",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "RV_RETURN_VALUE_IGNORED",
+  "className" : "com.sample.util.FileUtil",
+  "methodName" : "normalizeInput",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+} ]

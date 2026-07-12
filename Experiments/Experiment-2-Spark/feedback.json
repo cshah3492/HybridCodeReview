@@ -1,0 +1,233 @@
+[ {
+  "bugType" : "MS_EXPOSE_REP",
+  "className" : "spark.ExceptionMapper",
+  "methodName" : "getInstance",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "SING_SINGLETON_HAS_NONPRIVATE_CONSTRUCTOR",
+  "className" : "spark.ExceptionMapper",
+  "methodName" : "<init>",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "CT_CONSTRUCTOR_THROW",
+  "className" : "spark.QueryParamsMap",
+  "methodName" : "<init>",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "NP_BOOLEAN_RETURN_NULL",
+  "className" : "spark.QueryParamsMap",
+  "methodName" : "booleanValue",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "EI_EXPOSE_REP",
+  "className" : "spark.Request",
+  "methodName" : "bodyAsBytes",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "EI_EXPOSE_REP",
+  "className" : "spark.Request",
+  "methodName" : "headers",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "EI_EXPOSE_REP",
+  "className" : "spark.Request",
+  "methodName" : "session",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.95,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "EI_EXPOSE_REP",
+  "className" : "spark.Response",
+  "methodName" : "raw",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "IS2_INCONSISTENT_SYNC",
+  "className" : "spark.Service",
+  "methodName" : null,
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "EI_EXPOSE_REP2",
+  "className" : "spark.Service$StaticFiles",
+  "methodName" : "<init>",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "EI_EXPOSE_REP",
+  "className" : "spark.Session",
+  "methodName" : "raw",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.95,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "DM_EXIT",
+  "className" : "spark.embeddedserver.jetty.EmbeddedJettyServer",
+  "methodName" : "extinguish",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "EI_EXPOSE_REP2",
+  "className" : "spark.embeddedserver.jetty.EmbeddedJettyServer",
+  "methodName" : "<init>",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "EI_EXPOSE_REP2",
+  "className" : "spark.embeddedserver.jetty.EmbeddedJettyServer",
+  "methodName" : "configureWebSockets",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE",
+  "className" : "spark.embeddedserver.jetty.EmbeddedJettyServer",
+  "methodName" : "ignite",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "WMI_WRONG_MAP_ITERATOR",
+  "className" : "spark.embeddedserver.jetty.websocket.WebSocketServletContextHandlerFactory",
+  "methodName" : "create",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "EI_EXPOSE_REP2",
+  "className" : "spark.http.matching.MatcherFilter",
+  "methodName" : "<init>",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.95,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "SF_SWITCH_NO_DEFAULT",
+  "className" : "spark.resource.UriPath",
+  "methodName" : "canonical",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "NP_LOAD_OF_KNOWN_NULL_VALUE",
+  "className" : "spark.route.Routes",
+  "methodName" : "findMultiple",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "MS_EXPOSE_REP",
+  "className" : "spark.route.ServletRoutes",
+  "methodName" : "get",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "EI_EXPOSE_REP2",
+  "className" : "spark.serialization.Serializer",
+  "methodName" : "setNext",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.95,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "IS2_INCONSISTENT_SYNC",
+  "className" : "spark.staticfiles.StaticFilesConfiguration",
+  "methodName" : null,
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "MS_SHOULD_BE_FINAL",
+  "className" : "spark.staticfiles.StaticFilesConfiguration",
+  "methodName" : null,
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "DM_DEFAULT_ENCODING",
+  "className" : "spark.utils.IOUtils",
+  "methodName" : "copy",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "CO_COMPARETO_INCORRECT_FLOATING",
+  "className" : "spark.utils.MimeParse$FitnessAndQuality",
+  "methodName" : "compareTo",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "EQ_COMPARETO_USE_OBJECT_EQUALS",
+  "className" : "spark.utils.MimeParse$FitnessAndQuality",
+  "methodName" : "compareTo",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "WMI_WRONG_MAP_ITERATOR",
+  "className" : "spark.utils.MimeParse$ParseResults",
+  "methodName" : "toString",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "DM_DEFAULT_ENCODING",
+  "className" : "spark.utils.StringUtils",
+  "methodName" : "toString",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "EI_EXPOSE_REP2",
+  "className" : "spark.utils.urldecoding.Utf8StringBuilder",
+  "methodName" : "<init>",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.95,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+} ]

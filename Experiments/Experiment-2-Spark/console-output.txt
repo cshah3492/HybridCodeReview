@@ -1,0 +1,613 @@
+Hybrid Code Review Prototype Started
+Findings found: 41
+
+===== STATIC FINDING =====
+Finding{bugType='MS_EXPOSE_REP', className='spark.ExceptionMapper', methodName='getInstance', line=34, message='Public static method may expose internal representation by returning a mutable object or array'}
+Jul 10, 2026 11:05:54 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=b8LU03Jn_lLHlFx.tpdiq_nBtfDGUKF6vOFU01SU5TY-1783739151.8777184-1.0.1.1-OiWO4_Im9_jkalNWBxlFtz198LP5dnSwjVUcK1yyVozkv2vzkO95HSQCBBzB5DmwTNDzq_2Ge0l.S7kbZtPua5ZT8kZO8kXqwJAix3LCo63nbtdEa1wmlW6ZU55sZBxC; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:35:54 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:35:54 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The method getInstance is public and static, which means it can be accessed from outside the class. If it returns a mutable object or array, it could allow external code to modify the internal state of the class, leading to unintended side effects.
+Recommendation : Ensure that the method returns an immutable copy of the object or array, or wrap the mutable object in an unmodifiable view to prevent external modifications.
+
+===== STATIC FINDING =====
+Finding{bugType='SING_SINGLETON_HAS_NONPRIVATE_CONSTRUCTOR', className='spark.ExceptionMapper', methodName='<init>', line=34, message='Class using singleton design pattern has non-private constructor.'}
+Jul 10, 2026 11:05:56 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=xa6Hxa3umqhq0PExvD7U1idnwpJ8OIQGrIWSh4LtyqA-1783739154.850916-1.0.1.1-QD_yI6WXyQse1v1w4blVSHCrqIfTXk_2kLH4Q.h8Y1sCfalHz_jzfl0uoFOzKLc96TSJBfelPV9_Xw81Iw3TGUg.ZyH6CS2DK1hmzBYYC8t5JFAuPW36V94YxyzQjLnd; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:35:56 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:35:56 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The singleton design pattern requires that the constructor be private to prevent instantiation from outside the class. A non-private constructor violates this principle, allowing multiple instances of the class to be created, which undermines the singleton pattern.
+Recommendation : Change the constructor of the ExceptionMapper class to private to enforce the singleton design pattern.
+
+===== STATIC FINDING =====
+Finding{bugType='CT_CONSTRUCTOR_THROW', className='spark.QueryParamsMap', methodName='<init>', line=34, message='Be wary of letting constructors throw exceptions.'}
+Jul 10, 2026 11:05:58 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=VChO.uzCpMeQxVXPGn6hNFm876c77WpHUf4vfx022vY-1783739156.9303799-1.0.1.1-UUfwmDaVHdnC78ypdm8OtLw39bEvvWU17bAGlTQhxUUJAgWTPSFRotmETxjva99kGNcTxu4g2Sxox0ILcRkgYNNeqN2pRVm286vgZ92dcYzDVY1ZOnjPxTlIbAlxAwPB; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:35:58 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:35:58 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : Constructors throwing exceptions can lead to incomplete object states and make error handling more complex. It is generally considered a bad practice as it can lead to unexpected behavior in the code that uses the class.
+Recommendation : Consider using factory methods or static initialization blocks to handle exceptions instead of allowing the constructor to throw them. This can help ensure that objects are always in a valid state upon creation.
+
+===== STATIC FINDING =====
+Finding{bugType='NP_BOOLEAN_RETURN_NULL', className='spark.QueryParamsMap', methodName='booleanValue', line=34, message='Method with Boolean return type returns explicit null'}
+Jul 10, 2026 11:06:00 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=FpyZUJBnQU6sHG4D48CfxmhPtzgoXnIDot8Wkl6m03c-1783739158.8730373-1.0.1.1-pJDROsne_zbPlcWLti2XL_khND73gZK0sZ28HrGLrUWWruZdUoYZYsF45JfFkCECXiJ9Zfzr.5J7R2hG2zBquCJ1ny3nseLAsMSv2lUR.AOPvZzGo1YfaC4p6nhRIkMo; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:00 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:00 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The method is defined to return a Boolean type, which can be null. Returning null can lead to NullPointerExceptions when the return value is used without null checks, violating best practices for methods that are expected to return a boolean value.
+Recommendation : Change the return type to 'boolean' (primitive) instead of 'Boolean' (wrapper class) to avoid returning null. If a value cannot be determined, consider using a default value (e.g., false) instead.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP', className='spark.Request', methodName='bodyAsBytes', line=48, message='May expose internal representation by returning reference to mutable object'}
+Jul 10, 2026 11:06:02 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=znHUODoJdOANxLaA2oc6_C2Qj6TiJBvHRCD5IEdyr7s-1783739160.6802962-1.0.1.1-SwehIIttnT3pCBg4nIF1nnbiph0VJtJ6SsLqR3uHXXkcPIAb4KeO_DbplP8GhkpsJTImvWoUVQe00Fe9iNW_vr_ok7C6FAMc2tHptIx7jx_OEykG_27NA8gHu3ikXGNk; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:02 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:02 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The method 'bodyAsBytes' returns a reference to a mutable object, which can lead to unintended modifications of the internal state of the class. This can expose the internal representation and potentially allow malicious code to alter the object's state.
+Recommendation : Return a copy of the mutable object instead of the original reference to prevent external modifications. For example, if 'bodyAsBytes' returns a byte array, create and return a new array that is a copy of the original.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP', className='spark.Request', methodName='headers', line=48, message='May expose internal representation by returning reference to mutable object'}
+Jul 10, 2026 11:06:04 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=yGVGEbCHgSK9wC752G8ZAMChPP4vDsbpRmE7p3Iwz5E-1783739162.7516916-1.0.1.1-6YP08zNcgeRWol_Tq5.Jgh6zdNap4j2wPb2Tf6vZkSb.V9fINzl71tXvpWLRT4Bz_sIsrELqSNE8EdTagPdJM9cQ1i00ZxGEf_OS9KrlKS68j9u7yOdm38s2.IMUgwKE; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:04 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:04 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The method 'headers' returns a reference to a mutable object, which can lead to unintended modifications of the internal state of the 'Request' class. This can expose the internal representation and potentially allow malicious code to alter the object's state.
+Recommendation : Return a defensive copy of the mutable object instead of the original reference to prevent external modifications.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP', className='spark.Request', methodName='session', line=48, message='May expose internal representation by returning reference to mutable object'}
+Jul 10, 2026 11:06:06 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=qBlfdy6WKNT9eD3ZyArlHvT9YASaS__mvL8Zd2PKd0o-1783739164.3216703-1.0.1.1-FH_H1GI_E.lS0enSiulC5nKMlEzdCtg8Hd7VtvQmbscnrC.gNmuEy3v10fI31ecgEks.78ZgwrVVMSD0sidc7E6BsYC03JEkEEAWXHpDMC3JAkhAf4SEaRnCZqDXW0Qa; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:06 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:06 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The method 'session' in the 'Request' class is likely returning a reference to a mutable object, which can lead to unintended modifications of the internal state. Given the previous developer feedback indicating acceptance of similar findings, this reinforces the likelihood of a genuine issue.
+Recommendation : Return a defensive copy of the mutable object instead of the original reference to prevent external modifications.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP', className='spark.Request', methodName='session', line=48, message='May expose internal representation by returning reference to mutable object'}
+Jul 10, 2026 11:06:08 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=piEPfI5zxUntAJYqh5yqhu9FoTfv1a6rBOcRaVua0q0-1783739166.8712344-1.0.1.1-njuXV6OVWnn4rdBXuhEtoVnHxzCehHuWwHfmNimP383oENuyi6DoHWzsdejZhYKK_TbwAja0YO5v8JG8aMMk40CCSNM7VD23klK.FZ3M23cfButGZ68FvXyDD0U8RzWK; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:08 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:08 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.95
+Reasoning      : The finding indicates that the method 'session' in the 'Request' class returns a reference to a mutable object, which can lead to unintended modifications of the internal state. Given the past developer feedback confirming similar findings as true positives, it is likely that this issue is valid.
+Recommendation : Return a defensive copy of the mutable object instead of the original reference to prevent external modifications.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP', className='spark.Response', methodName='raw', line=37, message='May expose internal representation by returning reference to mutable object'}
+Jul 10, 2026 11:06:09 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=ff885sybtxRuJkq1VftTEgECuMUgzz0til03IjClcaU-1783739168.4887002-1.0.1.1-pzA468AkkFPXACF.PUEBPJHSkQ9riytaMxJSSP5EH7f7RMy_5D2eedaHnWe1Hnq7Cxc6hzWEoXvaPWPcKfN8CXge8xa6Tncd1pMbhtjyj34xi6LGLlep7iqeFruTx7sU; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:10 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:10 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that the method 'raw' in the 'Response' class returns a reference to a mutable object, which can lead to unintended modifications of the internal state. Given the past developer feedback confirming similar findings as true positives, it is likely that this issue is valid.
+Recommendation : Return a defensive copy of the mutable object instead of the original reference to prevent external modifications.
+
+===== STATIC FINDING =====
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Jul 10, 2026 11:06:11 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=u55VJ10o1XHG_FsnCOMrAq6fzkHynfgDS.UjeU9Gacg-1783739170.1263714-1.0.1.1-kCXz_HmM9GTfRKf0V77fp8DcgcFtG3y4TRI7T.uujS0gguTCZkG_6teMDVfqR0e4FkmSJHWxmp2hu1dOxGiAGH6rbb5VwA.dlPnF84HKPnY487UGHW7Ja3XXoRX5m45z; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:11 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:11 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.85
+Reasoning      : The finding indicates that there is inconsistent synchronization in the 'Service' class, which can lead to race conditions or visibility issues in a multi-threaded environment. This suggests that some shared resources may not be properly synchronized, potentially causing unpredictable behavior.
+Recommendation : Review the synchronization mechanisms used in the 'Service' class. Ensure that all accesses to shared mutable state are properly synchronized using synchronized blocks or other concurrency controls (e.g., ReentrantLock). Consider using higher-level concurrency utilities from the java.util.concurrent package if appropriate.
+
+===== STATIC FINDING =====
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Jul 10, 2026 11:06:13 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=DboDIQGyCmb0Fb4TK5Uz6PFGW_BQ1uvrJ1J1uW.Sz4c-1783739172.0016673-1.0.1.1-9U3Hd26xVfwt9U.9heBllgInf5W.NQUyMCtR5R24zwYYAZR6vwEVgCOfT_ysYqWt_S_nDEYdh947x9FIn1iciMyXLBXMMlWxUDZoVrbkV24EbwzGqqH3AUkyNR2m9qIz; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:13 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:13 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that there is inconsistent synchronization in the 'Service' class, which can lead to race conditions or unpredictable behavior in a multi-threaded environment. Given that a previous similar finding was accepted as a true positive, it suggests a pattern of potential issues in this area.
+Recommendation : Review the synchronization mechanisms used in the 'Service' class. Ensure that all shared resources are consistently synchronized using the same locks or synchronization blocks to prevent concurrent access issues.
+
+===== STATIC FINDING =====
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Jul 10, 2026 11:06:14 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=cflja8No7lymUOno2H5NvsaYj0hsKXfMlTNAn6RZeKg-1783739173.351959-1.0.1.1-6U.E0.wuxs1NyoFr1EFFrrHU8tiZTjd1xb3tGubLYJr1472u45SLGJPDj17Bpk_swN2F2OTAeprzRQWA1oKBFz9LyOsKGTc9MK35lOdWfeLpa3qnK5Puy7web2VPn0ep; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:14 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:14 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that there is inconsistent synchronization in the code, which can lead to race conditions or unexpected behavior in a multi-threaded environment. Given that a previous similar finding was accepted as a true positive, it suggests a pattern of potential issues in this area.
+Recommendation : Review the synchronization mechanisms used in the Service class. Ensure that all shared resources are consistently synchronized using the same locks or synchronization blocks to prevent concurrent access issues.
+
+===== STATIC FINDING =====
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Jul 10, 2026 11:06:15 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=PtsEFYUweS676Cqe60I8hS6rjbtt8SUz6o18yFHYXf8-1783739174.6742296-1.0.1.1-Qh27VEkJHD3WXz9JsUB8Ao_XCykPmli7HaBjCFIoyDQK84e06GYJLP9QU5XIzd0zjq_G4uto45yapt_3Ib_Sx3cMO4.or5EMCgl4NWcJS5XYxmxyX6trSx92S1Z.FJAZ; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:15 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:15 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that there is inconsistent synchronization in the code, which can lead to race conditions or unexpected behavior in a multi-threaded environment. Given that a previous similar finding was accepted as a true positive, it suggests a pattern of potential issues in this area.
+Recommendation : Review the synchronization mechanisms used in the Service class. Ensure that all shared resources are consistently synchronized using the same locks or synchronization blocks to prevent concurrent access issues.
+
+===== STATIC FINDING =====
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Jul 10, 2026 11:06:17 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=LqLa3O.Vo7GKsb155nwcyeeNMDmtKNQHfVhnT5lYs.8-1783739176.1018848-1.0.1.1-Vg0W_eA7sh5h7fJKTXQa6sBmzzuO_VOD3FAlAXGUSMFswhIhqmoj7dwoc27C.PKbVwoeD6p.0iY.rl56moiRXnLqYwz7OwiPdY0PdZo2oyzd_fc4IGM8N7biOA.WoUuy; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:17 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:17 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that there is inconsistent synchronization in the code, which can lead to race conditions or unpredictable behavior in a multi-threaded environment. Given that a previous similar finding was accepted as a true positive, it suggests a pattern of potential issues in this area.
+Recommendation : Review the synchronization mechanisms used in the Service class. Ensure that all shared resources are consistently synchronized using the same locks or synchronization blocks to prevent concurrent access issues.
+
+===== STATIC FINDING =====
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Jul 10, 2026 11:06:18 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=VdZ9AJOS8DBFhLob5AHwPNohGXdO_LDBiSkVxPUjGmg-1783739177.4315915-1.0.1.1-g4tdAkiHeZ5WC1QZpmNTLy_ONNMNGHkogFRIyeSZU0j8RPGpkUKmT.JrdvWfXYF3OVmwJoSjJwuG6X9VMwOqginueHqSzVe_2ikvYtX_XMculw9y_kklDpS3rdf0qBEv; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:18 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:18 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that there are inconsistencies in how synchronization is applied within the 'Service' class, which can lead to race conditions or visibility issues in a multi-threaded environment. Given that a previous similar finding was accepted as a true positive, it suggests a pattern of potential synchronization issues in this codebase.
+Recommendation : Review the synchronization mechanisms used in the 'Service' class. Ensure that all shared mutable state is consistently synchronized using the same locks or synchronization blocks to prevent concurrent access issues.
+
+===== STATIC FINDING =====
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Jul 10, 2026 11:06:20 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=RYI.4sGdsp7U.EGhnQviBxImKZOPQC6R53.EJAqX7l0-1783739178.9082158-1.0.1.1-CwNZjdetHylz7bX20xZxGVNP06lKjxcgHMRPYM_af.y4djhlhL3m32O1JDsFV6fQRICf3G_oS43t_1kIMKThNAA5Ur7BYAUq3vUS20rm5rzAvZwfBRHEX2HEiBMdt_1G; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:20 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:20 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that there is inconsistent synchronization in the code, which can lead to race conditions and unpredictable behavior in a multi-threaded environment. Given that a previous similar finding was accepted as a true positive, it suggests a pattern of potential issues in this area.
+Recommendation : Review the synchronization mechanisms used in the Service class. Ensure that all shared resources are consistently synchronized using the same locks or synchronization blocks to prevent concurrent access issues.
+
+===== STATIC FINDING =====
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Jul 10, 2026 11:06:21 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=ucCgunxn6i3xS9jemKVQKPpg5_5j4WuwVlucdsjxies-1783739180.2955017-1.0.1.1-JiPPijoUQDE948w2BoiUTkrqLXjCUJuutRKOmHiBk_BUkPBPfxUMvXM3qC2UouGQPkXwq31PFqr52BvORh5X_FCbzP_HbkfiUrJR649ZND7M4BXzl3VpFneW5sZrzhh4; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:21 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:21 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that there is inconsistent synchronization in the code, which can lead to race conditions or unpredictable behavior in a multi-threaded environment. Given that a previous similar finding was accepted as a true positive, it suggests a pattern of potential issues in this area.
+Recommendation : Review the synchronization mechanisms used in the Service class. Ensure that all shared resources are consistently synchronized using the same locks or synchronization blocks to prevent concurrent access issues.
+
+===== STATIC FINDING =====
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.Service', methodName='null', line=55, message='Inconsistent synchronization'}
+Jul 10, 2026 11:06:22 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=eRN3J3QnHhY9_5zT0lNPVQvgk.hsQ9DorO5swFXWjKQ-1783739181.5428004-1.0.1.1-ylIoW61dEMbwbgEjq6s.dGdT7p0YAj5ojhYf0wpvuQi0jDozLzO8_WiRiH4AkPPPiRyKPNgZ3eVwr5NwZPIbZsO_C71jCYb47CPrAhubdRMDbolhKr3hnKKtTbHkW9k.; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:22 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:22 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that there is inconsistent synchronization in the code, which can lead to race conditions and unpredictable behavior in a multi-threaded environment. Given that a previous similar finding was accepted as a true positive, it suggests a pattern of potential issues in this area.
+Recommendation : Review the synchronization mechanisms used in the Service class. Ensure that all shared resources are consistently synchronized using the same locks or synchronization blocks to prevent concurrent access issues.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP2', className='spark.Service$StaticFiles', methodName='<init>', line=626, message='May expose internal representation by incorporating reference to mutable object'}
+Jul 10, 2026 11:06:24 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=IdmDlOSOfF6kmyfRdyxkAov4pDZpP7Bb4KKyfN7jLcc-1783739182.8295324-1.0.1.1-NeqOZIDxlVFzmRwTadEopAAla8LV1mkgDQJ3SjY0ZsIsSQ.PHwOr.d6.DRMfKMtvKOknIs9eIeM3Aa9D9E1mqAf4fRZridSqDrx4VD5tUQ8u0oMU16CDIXgAbW0D8m4A; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:24 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:24 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that the constructor of the StaticFiles class may be exposing a reference to a mutable object, which can lead to unintended modifications from outside the class. This is a common issue in Java where internal state can be compromised if mutable objects are directly exposed.
+Recommendation : To remediate this issue, ensure that any mutable objects passed to the constructor are either cloned or wrapped in an immutable structure before being stored in the class. This will prevent external modifications to the internal state of the StaticFiles class.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP', className='spark.Session', methodName='raw', line=26, message='May expose internal representation by returning reference to mutable object'}
+Jul 10, 2026 11:06:26 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=Q65bxmCUpZuFEHwL38gEHnOmzQ.oCQnttoNv2ei4ZxY-1783739185.0427656-1.0.1.1-KRSrQ0hDlDNcdFD8LP3ko6RxB0wXHcuPSv.VsifsYsu0FRf688EHOlEasNCddKBKaYJcYz7xfSZWVseyI.gTZRqcoXwkT4cYMOhOQ5_Po1tsEn65LjQpuTDRKkTyIJmE; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:27 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:27 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.95
+Reasoning      : The static analyzer has identified a potential issue where a mutable object is being returned, which could allow external code to modify the internal state of the class. Given the past developer feedback indicating acceptance of similar findings, it is likely that this issue is valid.
+Recommendation : Return a defensive copy of the mutable object instead of the original reference to prevent external modifications.
+
+===== STATIC FINDING =====
+Finding{bugType='DM_EXIT', className='spark.embeddedserver.jetty.EmbeddedJettyServer', methodName='extinguish', line=55, message='Method invokes System.exit(...)'}
+Jul 10, 2026 11:06:28 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=_drd376REKvR4To1SOjv1.G4mnjMPYAicGF8SF8eXtQ-1783739187.180187-1.0.1.1-bT3yk_UVfqF03KypvLP.5FxxkxbD_UaiyZaDh6jxWFeUWGlFe4OMRIJegB0UclAxfZMJl2OJydQaeCE5jEDnRNs5cGPI4iCmQriizwIpd0bC7Y60mwkCELBq9hL3wsb7; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:28 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:28 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : Invoking System.exit(...) in a method can lead to abrupt termination of the JVM, which is generally considered a bad practice in server applications as it can disrupt ongoing processes and lead to resource leaks.
+Recommendation : Refactor the method to handle shutdown gracefully without calling System.exit(...). Consider using a shutdown hook or a controlled shutdown mechanism to clean up resources properly.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP2', className='spark.embeddedserver.jetty.EmbeddedJettyServer', methodName='<init>', line=55, message='May expose internal representation by incorporating reference to mutable object'}
+Jul 10, 2026 11:06:30 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=N4B9uAByOUI83x9wZ1TQw4FJqYoKm_JEb6hJKE_3ZEU-1783739188.8101423-1.0.1.1-N3oHg5RO6BMOh8CFnw1P9EO0LFndWQNVPEWwQq3XheiXWlcW1JQNi.tfjmoDZKFUPk.0k7CDFz8La7CAuIHRFN8nSmJDMI2W6wWOsIJBY8aiiR3WbUhA_yQHp05hHzgD; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:30 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:30 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that the constructor of the EmbeddedJettyServer class may be exposing a mutable object reference, which can lead to unintended modifications from outside the class. Given that a previous similar finding was accepted as a true positive, it suggests a pattern of concern regarding internal state exposure.
+Recommendation : To remediate this issue, ensure that any mutable objects passed to the constructor are either cloned or wrapped in an immutable structure before being stored in the class. This will prevent external modifications to the internal state of the EmbeddedJettyServer.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP2', className='spark.embeddedserver.jetty.EmbeddedJettyServer', methodName='configureWebSockets', line=55, message='May expose internal representation by incorporating reference to mutable object'}
+Jul 10, 2026 11:06:32 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=iINZBZTsdGpPke.4AASDhZsO8JRk5c9TFy7pUt.ac78-1783739190.7102394-1.0.1.1-DaQgRIDoQh4w31K5QVeojvqIQ2dsaXaKc0Wqcvfr7UBe1az_j1pgEszCa2BjrQqBkTCuHMf_Qo.dTAdsWOhQMJbwo2WbLm0xuud0lfgbJGb78EIyMZoc3U2YFzCgQbL5; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:32 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:32 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that the method may expose a mutable object, which can lead to unintended modifications from outside the class. Given the past feedback from developers marking similar findings as True Positives, it suggests a consistent concern regarding the internal representation being exposed.
+Recommendation : Encapsulate the mutable object by returning a defensive copy or using an immutable wrapper to prevent external modifications.
+
+===== STATIC FINDING =====
+Finding{bugType='RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE', className='spark.embeddedserver.jetty.EmbeddedJettyServer', methodName='ignite', line=55, message='Redundant nullcheck of value known to be non-null'}
+Jul 10, 2026 11:06:33 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=izP_Ou_VOBwlQ5VrtqraFM3YmbiZ5WgU2KEm2RIIy8c-1783739192.5470266-1.0.1.1-guHB5kF_ME3qLImWIB4wKDNoJWHijmfQhlJBWIOCMMjXgB5mgLoKcANufw8cnXTqxMZfA56akybTKVLrcr7563u3lOGjAvMJUZoqtlPE8c9RD5pexVT73JaEdBMgbzJi; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:33 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:33 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The static analysis indicates that a null check is being performed on a variable that is known to be non-null based on its type or previous assignments. This suggests that the check is unnecessary and can be removed to improve code clarity.
+Recommendation : Remove the redundant null check from the 'ignite' method in the EmbeddedJettyServer class.
+
+===== STATIC FINDING =====
+Finding{bugType='WMI_WRONG_MAP_ITERATOR', className='spark.embeddedserver.jetty.websocket.WebSocketServletContextHandlerFactory', methodName='create', line=33, message='Inefficient use of keySet iterator instead of entrySet iterator'}
+Jul 10, 2026 11:06:35 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=zzNvnuKEQ2mpggty0jPxnk.EosDUjiPq_HzuSPVqGJs-1783739193.9465547-1.0.1.1-XfaDXMn_JlhdzH7iRYtaP2_iLsfKCEr0EGOa2hyGD684NZGOXIZthFgq2IrsH9mGfSvsVJWxob_WJZdpor_jZ8AaHuhEPT1uHfmNYGgHb87nP8XuH340IAh83VcaWom6; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:35 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:35 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : False Positive
+LLM Prediction : True Positive
+Evaluation     : False Positive (FP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : Using a keySet iterator can lead to inefficient performance when both keys and values are needed, as it requires additional lookups to access values. An entrySet iterator provides both keys and values directly, improving performance.
+Recommendation : Refactor the code to use entrySet() instead of keySet() when iterating over the map to enhance performance.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP2', className='spark.http.matching.MatcherFilter', methodName='<init>', line=46, message='May expose internal representation by incorporating reference to mutable object'}
+Jul 10, 2026 11:06:37 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=sNyUnNJ4UADrcHu3sSwZtxPUPvy.2TbVidI3my5FLoU-1783739195.4086418-1.0.1.1-gttxxgoJVbtFZmMbuiLbk1tPg0nc1svVnT47o8vSXKL1wpC1ok7Up5.caEoexDUyDa4mjcWzwqqrC2mGZUfZbw_IW2byTUXLZHV4sBa1LBIec3E6pMM3AB1CpW_FibK_; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:37 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:37 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that the constructor of the MatcherFilter class may be exposing a mutable object, which can lead to unintended modifications from outside the class. Given the past developer feedback confirming similar findings as true positives, it is likely that this issue is valid.
+Recommendation : Ensure that any mutable objects passed to the constructor are either cloned or wrapped in an immutable structure before being stored in the class. This will prevent external modifications to the internal state of the MatcherFilter.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP2', className='spark.http.matching.MatcherFilter', methodName='<init>', line=46, message='May expose internal representation by incorporating reference to mutable object'}
+Jul 10, 2026 11:06:38 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=tXY.qeWMkSoYVGsa_NbOhm4AHqkEeLAqCJJEa.T.mlM-1783739197.2505577-1.0.1.1-q6wZNlVcR_ae2d1MiFWIFAs4_RqKYhks6HgrsnWT21hDrn7lKXo0t1YjufSI1VN4URroFBSy_Uzpd.Z1Z5_wJ3xXnzKjpsONnVjk7OYvrH6_LgpPyjxvadoPRtUmEpyr; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:39 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:39 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.95
+Reasoning      : The finding indicates that the constructor of the MatcherFilter class may be exposing a mutable object, which can lead to unintended modifications from outside the class. Given the history of similar findings being accepted as true positives, it is likely that this issue is valid.
+Recommendation : Ensure that any mutable objects passed to the constructor are either cloned or wrapped in an immutable structure before being stored as class fields.
+
+===== STATIC FINDING =====
+Finding{bugType='SF_SWITCH_NO_DEFAULT', className='spark.resource.UriPath', methodName='canonical', line=22, message='Switch statement found where default case is missing'}
+Jul 10, 2026 11:06:40 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=mlG0X1h.JZXsTo1Gj8zjq8pB1NeswzoEkPa8QlETU1U-1783739199.1605885-1.0.1.1-oJz1HgqduPX2DfLpo3HKyXLvyzjRPtNZnEsrk1UmNLwwx2.xWxDeI64adzktBDQM9b1MPxROFsQsPFvBKBs578ZUWa0.g50lJarIP0mHtLiaKSK0j6X_O8iG.74DJnHg; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:40 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:40 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The absence of a default case in a switch statement can lead to unhandled cases, which may result in unexpected behavior or bugs if new cases are added in the future. This is a common best practice in Java to ensure all possible values are accounted for.
+Recommendation : Add a default case to the switch statement to handle unexpected values appropriately, or throw an exception if an unhandled case is encountered.
+
+===== STATIC FINDING =====
+Finding{bugType='NP_LOAD_OF_KNOWN_NULL_VALUE', className='spark.route.Routes', methodName='findMultiple', line=39, message='Load of known null value'}
+Jul 10, 2026 11:06:42 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=PP.8zsskd7VAOAIxWMDYQXua_eJdO1STlLPoiPBGiDY-1783739200.9456682-1.0.1.1-mw0EKWmVAuqzC13JDHuQOkT.5ZC4rruNQ7ph2BsKoN7rRLqxRSqbmjpukEWLJYI5tRUPpGWtc3urbvuj7uuJXUh.l4U4y68OUbYoQKyd6hPsnYlBvZ4AQPLWMTchN96b; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:42 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:42 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The static analyzer has detected a potential issue where a variable that is known to be null is being accessed, which can lead to a NullPointerException. This indicates a flaw in the logic where the variable should have been initialized or checked for null before use.
+Recommendation : Add a null check before accessing the variable or ensure that the variable is properly initialized before it is used in the method.
+
+===== STATIC FINDING =====
+Finding{bugType='MS_EXPOSE_REP', className='spark.route.ServletRoutes', methodName='get', line=27, message='Public static method may expose internal representation by returning a mutable object or array'}
+Jul 10, 2026 11:06:43 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=6Fj1g2Sv7.AoqKJrNaiiB.yl7VwvvnRxCgWgf.Bnnc0-1783739202.5441742-1.0.1.1-1u1dM_4snvyfWN0GaXWrf_HR8To82Xvk2tZVL882qPW6IsIC6_Q_QQQ71a_xzDEO3T6873zLkgzkAjPun972DqamZsGscvNgfKdEvj6cjpTMV3WAxob7ulABGj3DyK92; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:43 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:43 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The method is public and static, which increases the risk of exposing internal mutable objects. If the method returns a mutable object or array, it can lead to unintended modifications from outside the class, violating encapsulation principles.
+Recommendation : Return an immutable copy of the mutable object or array, or wrap it in an unmodifiable collection to prevent external modifications.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP2', className='spark.serialization.Serializer', methodName='setNext', line=27, message='May expose internal representation by incorporating reference to mutable object'}
+Jul 10, 2026 11:06:45 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=STIBHFeMSMNS6TSkWK24QB5lk99BLeVz3AIL67IeJqc-1783739204.0260682-1.0.1.1-jTbPL8G6M033BZTEWbKDN.2zOgzTLQKr9Jn5GMNS9DTLSd7qHCLZl_CARmOZNJEM2qw_l5huWL8REII4LnFQY.Kp_i3XY5D2euyOSGSQdl1ozsY_UkJUlRfQEMNXCRqe; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:45 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:45 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.95
+Reasoning      : The finding indicates that the method may expose internal mutable state, which can lead to unintended side effects if the mutable object is modified externally. Given the history of similar findings being accepted as true positives, it is likely that this issue is valid.
+Recommendation : Consider making a defensive copy of the mutable object before storing it or ensure that the object is immutable to prevent external modifications.
+
+===== STATIC FINDING =====
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.staticfiles.StaticFilesConfiguration', methodName='null', line=47, message='Inconsistent synchronization'}
+Jul 10, 2026 11:06:47 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=U.TsnEq2PacP3xNjL3hIdgDQkOiIsrpnVCfPzwZEhqc-1783739205.6794531-1.0.1.1-EIBGfaZ7Tc5HQktzHcNyW1TOUKL7CmTBcV8SYas2uznjNFAi2eHUWIV4_j0sBolOvwWTggjh8mewU_BzEksrLs2RZj1UiOKB2L9ct8e75q2XIMrgzF90K.jlaTJxBebk; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:47 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:47 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates that there is inconsistent synchronization in the StaticFilesConfiguration class, which can lead to race conditions or visibility issues in a multi-threaded environment. Given that a previous similar finding was accepted as a true positive, it suggests a pattern of potential synchronization issues in this codebase.
+Recommendation : Review the synchronization mechanisms used in the StaticFilesConfiguration class. Ensure that all shared mutable state is properly synchronized using the same lock object or synchronized block to maintain thread safety.
+
+===== STATIC FINDING =====
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.staticfiles.StaticFilesConfiguration', methodName='null', line=47, message='Inconsistent synchronization'}
+Jul 10, 2026 11:06:49 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=1qFZGHLy3wagikHp8779Vkjh2_MuTn1FzadMUSczFQQ-1783739207.4530005-1.0.1.1-wG0bcQ1Gcx3QtH0qXi78Cje7exLGj_BbNbYL3XqdvciteKApZKlq8K14XETGwFFhbjjrEAwfLIkzJ4G8_pE3_jAeY1GbY_WZRTx_nZu.BKBS2ulp5tzTdPsZF8Hp6NOt; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:49 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:49 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates inconsistent synchronization, which can lead to race conditions and unpredictable behavior in a multi-threaded environment. Given that past similar findings were accepted as true positives, it suggests a pattern of issues in this area.
+Recommendation : Review the synchronization mechanisms used in the StaticFilesConfiguration class. Ensure that all shared resources are consistently synchronized using the same lock object or mechanism to prevent concurrent access issues.
+
+===== STATIC FINDING =====
+Finding{bugType='IS2_INCONSISTENT_SYNC', className='spark.staticfiles.StaticFilesConfiguration', methodName='null', line=47, message='Inconsistent synchronization'}
+Jul 10, 2026 11:06:51 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=13IVzLwMhEbBEqlHpxB7wDFsWIPjNfhxwJzRb2kvwsI-1783739209.2257388-1.0.1.1-zpduGF3VGIVx_LClJwaJFmKeGdc6fbIm1StnRgS8iOu1N5W4Y_Y0ET_6qD9CjUF_alBeZOk0Yl_7RbNfCq2n.JZ_IMg8bCShSNAs3DL3xIlcdmRunPQ90HJRrmI0wWdz; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:51 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:51 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The finding indicates inconsistent synchronization, which can lead to race conditions and unpredictable behavior in a multi-threaded environment. Given that past similar findings were accepted as true positives, it suggests a pattern of issues in this area.
+Recommendation : Review the synchronization mechanisms used in the StaticFilesConfiguration class. Ensure that all shared resources are consistently synchronized using the same lock object or mechanism to prevent concurrent access issues.
+
+===== STATIC FINDING =====
+Finding{bugType='MS_SHOULD_BE_FINAL', className='spark.staticfiles.StaticFilesConfiguration', methodName='null', line=47, message='Field isn't final but should be'}
+Jul 10, 2026 11:06:53 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=LVU4RT7tr7oD2guPK25CxrkrasX2oVuyC1Hrf08p0Oc-1783739211.1849155-1.0.1.1-R0FMGs2DofKMHkBuOqii0.Xoi9Y6vaC9py9qTKXYNHxGIbPgS9T70klVodIbno7TlZBsS1AKpt1pSES6s.TYj8n4tUjs9hX57A4wqCHm5eYoNRI_2yXtBh3ZXWpArM4H; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:53 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:53 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The static analysis finding indicates that a field in the StaticFilesConfiguration class is not declared as final, which is a common best practice for fields that should not be modified after initialization. This can help prevent unintended side effects and improve code maintainability.
+Recommendation : Declare the field as final to ensure it cannot be reassigned after construction. For example, change 'private Type fieldName;' to 'private final Type fieldName;'.
+
+===== STATIC FINDING =====
+Finding{bugType='DM_DEFAULT_ENCODING', className='spark.utils.IOUtils', methodName='copy', line=81, message='Reliance on default encoding'}
+Jul 10, 2026 11:06:54 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=fAvzyjfJLMwcZAyIV4DFtZgJElOynclz28fs.mH4nfg-1783739213.3169215-1.0.1.1-MMeksW6OT9LOiT_TsdPuza5lwNMBRH2f9nEZNliSKHtOGO5DxrWbnbEeDu2vAD.cSysIjavk7hWmpK0eqmLBzw0el48Xzdp9zJzPt5D9_1NrWLwMt_6sEgdC3tGP3jgt; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:54 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:54 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The use of default encoding can lead to inconsistent behavior across different environments, as it relies on the system's default character set, which may vary. This can cause issues when reading or writing files with specific encodings.
+Recommendation : Specify the character encoding explicitly when performing I/O operations, such as using InputStreamReader and OutputStreamWriter with a defined Charset.
+
+===== STATIC FINDING =====
+Finding{bugType='CO_COMPARETO_INCORRECT_FLOATING', className='spark.utils.MimeParse$FitnessAndQuality', methodName='compareTo', line=103, message='compareTo()/compare() incorrectly handles float or double value'}
+Jul 10, 2026 11:06:56 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=kDxuWjOE8MH.SmRoG6N3NJqz6nItEGr0EgKA7Wa8jDI-1783739214.9787433-1.0.1.1-NttLvcIO_AxojFSwfWwApaHnJ3rBUsZH_CREhcN0EJLY2i_ofyP8i7NAG_FV1y3OIs7P2BywKL6HwCB4FrUqeqXnh2R_AkboW0vsS6c3dO6nMx13h4bLM.eO8kNwXW4n; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:56 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:56 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The compareTo method is likely using floating-point values, which can lead to inaccuracies due to the way floating-point arithmetic works. This can result in incorrect comparisons, especially when dealing with values that are very close to each other.
+Recommendation : Use BigDecimal for comparisons instead of float or double to ensure accurate results, or implement a tolerance-based comparison for floating-point values.
+
+===== STATIC FINDING =====
+Finding{bugType='EQ_COMPARETO_USE_OBJECT_EQUALS', className='spark.utils.MimeParse$FitnessAndQuality', methodName='compareTo', line=103, message='Class defines compareTo(...) and uses Object.equals()'}
+Jul 10, 2026 11:06:57 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=abrn2ymZqRAMpUuNmKsO3mnDsHYeik4Cl28hQ3fVp6g-1783739216.5240104-1.0.1.1-m_8Jn08d5P.4ujq91ArdU0XmjwQY8VXkWuyEO_xOCPAgsxYvnClo6J8_h7TCu5LXaw8IQXXbJjiMPsUAZ34xvu703me0pq.nDH6tyz2SE86BOIcPwjXLxkbp7TycoVlG; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:57 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:57 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The compareTo method is expected to provide a consistent ordering for objects, and using Object.equals() can lead to inconsistent behavior when comparing objects, as equals() may not align with the natural ordering defined by compareTo.
+Recommendation : Override equals() and hashCode() methods in the class to ensure they are consistent with the compareTo method. Use compareTo for comparisons instead of Object.equals() within the compareTo method.
+
+===== STATIC FINDING =====
+Finding{bugType='WMI_WRONG_MAP_ITERATOR', className='spark.utils.MimeParse$ParseResults', methodName='toString', line=23, message='Inefficient use of keySet iterator instead of entrySet iterator'}
+Jul 10, 2026 11:06:59 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=.F9i2BHN80KW_STRUNEa4cKXTn5jRuumrjq5t3d1gSY-1783739218.0045218-1.0.1.1-4aIvsHeC6euVksZZ18S5oc2ZmZwFY8hh6At.9vZL.6ODbRZ364CfY2rwhDXLwJ4vy4oD3Y5OIFi3TCvHzLqT8fVevz.sKyDy.1R76E_Rf39hldVj8p9CY7qFtnOei98J; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:36:59 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:36:59 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : Using a keySet iterator instead of an entrySet iterator can lead to performance issues, especially if both keys and values are needed. The previous developer feedback indicates that similar findings were accepted, reinforcing the likelihood of this being a true positive.
+Recommendation : Refactor the code to use entrySet() instead of keySet() to iterate over the map, which will provide both keys and values in a single iteration, improving performance.
+
+===== STATIC FINDING =====
+Finding{bugType='DM_DEFAULT_ENCODING', className='spark.utils.StringUtils', methodName='toString', line=45, message='Reliance on default encoding'}
+Jul 10, 2026 11:07:01 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=np_MJAkvYcoxknEteQFsi0KIzroc_7vQc0StwMmaD.Y-1783739219.862521-1.0.1.1-vScLRcObYp.UYPQbIsh0r_6_71dH63UY8VG2_H0qes7Uo.ZKXHNM2lL9Ue041VsceeMZ2vG8RP3E.zjZLOVaSQVfMqYNZnn5isqapzohYoQXiG9FGN.53DZ7P_ynqTfN; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:37:01 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:37:01 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : True Positive
+LLM Prediction : True Positive
+Evaluation     : True Positive (TP)
+Classification : True Positive
+Confidence     : 0.9
+Reasoning      : The method relies on the default character encoding of the JVM, which can lead to inconsistent behavior across different environments. This is a known issue in internationalization (I18N) practices.
+Recommendation : Use a specific character encoding (e.g., UTF-8) when converting bytes to strings to ensure consistent behavior across different platforms.
+
+===== STATIC FINDING =====
+Finding{bugType='EI_EXPOSE_REP2', className='spark.utils.urldecoding.Utf8StringBuilder', methodName='<init>', line=38, message='May expose internal representation by incorporating reference to mutable object'}
+Jul 10, 2026 11:07:02 PM org.apache.http.client.protocol.ResponseProcessCookies processCookies
+WARNING: Invalid cookie header: "set-cookie: __cf_bm=eGLn5AXv.TbkxZEdPj23tSHhYBNffREvgby90e7p6tM-1783739221.2969894-1.0.1.1-ocIUom2Ixx.pkoghjEQxsg7qYHMFLB6N53TNRVu0w0aBW0K9ofbgqKwpFZgQdb6F.OtjZOsyFMYmGX6ZOHwZusVt7qjEhPPuN.2UwqtkpCScXxshAOnfqJO5jx.zY_kd; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sat, 11 Jul 2026 03:37:03 GMT". Invalid 'expires' attribute: Sat, 11 Jul 2026 03:37:03 GMT
+
+===== LLM TRIAGE RESULT =====
+Ground Truth   : Manual Review
+LLM Prediction : True Positive
+Evaluation     : Manual Review
+Classification : True Positive
+Confidence     : 0.95
+Reasoning      : The finding indicates that the constructor of Utf8StringBuilder may be exposing a mutable internal representation, which can lead to unintended modifications from outside the class. Given the history of similar findings being accepted as true positives, it is likely that this issue is valid.
+Recommendation : To remediate, ensure that any mutable objects passed to the constructor are defensively copied, or use immutable types to prevent external modifications.
+Report generated: prototype-report.txt
+CSV report generated: prototype-evaluation.csv
+
+===== EVALUATION METRICS =====
+TP: 14
+FP: 1
+FN: 0
+Precision: 93.33%
+Recall: 100.00%
+F1-Score: 96.55%
+
+===== FEEDBACK LEARNING STATISTICS =====
+Total Findings Analyzed: 41
+Developer Feedback Records: 29
+Findings Reusing Prior Feedback: 25
+Feedback Reuse Rate: 60.98%
+
+===== PERFORMANCE METRICS =====
+SpotBugs Analysis Time : 50 ms
+Average LLM Latency    : 1753 ms
+Total Execution Time   : 72215 ms
+
+===== LLM TOKEN USAGE =====
+Prompt Tokens     : 7562
+Completion Tokens : 4523
+Total Tokens      : 12085
+Estimated Cost    : $0.003848
+
+===== PROTOTYPE SUMMARY =====
+Prototype Language       : Java 8
+Static Analyzer          : SpotBugs
+LLM Model                : gpt-4o-mini
+Feedback Storage         : feedback.json
+Ground Truth Source      : ground-truth-spark.csv
+Evaluation Output        : prototype-evaluation.csv
+
+Hybrid Code Review Prototype Completed

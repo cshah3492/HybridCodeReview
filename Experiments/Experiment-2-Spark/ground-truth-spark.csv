@@ -1,0 +1,11 @@
+bugType,className,methodName,groundTruth
+EI_EXPOSE_REP,spark.Request,bodyAsBytes,True Positive
+EI_EXPOSE_REP,spark.Request,headers,True Positive
+IS2_INCONSISTENT_SYNC,spark.Service,null,True Positive
+DM_EXIT,spark.embeddedserver.jetty.EmbeddedJettyServer,extinguish,True Positive
+WMI_WRONG_MAP_ITERATOR,spark.embeddedserver.jetty.websocket.WebSocketServletContextHandlerFactory,create,False Positive
+DM_DEFAULT_ENCODING,spark.utils.IOUtils,copy,True Positive
+DM_DEFAULT_ENCODING,spark.utils.StringUtils,toString,True Positive
+CT_CONSTRUCTOR_THROW,org.apache.commons.io.input.XmlStreamReader,<init>,False Positive
+EI_EXPOSE_REP,org.apache.commons.io.monitor.FileAlterationMonitor,getObservers,True Positive
+OS_OPEN_STREAM,org.apache.commons.io.output.ByteArrayOutputStream,toBufferedInputStream,True Positive

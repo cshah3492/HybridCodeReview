@@ -1,0 +1,13 @@
+bugType,className,methodName,groundTruth
+RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT,com.sample.Main,main,False Positive
+ES_COMPARING_PARAMETER_STRING_WITH_EQ,com.sample.repository.EmployeeRepository,findByDepartment,True Positive
+ES_COMPARING_PARAMETER_STRING_WITH_EQ,com.sample.service.AuthenticationService,authenticate,True Positive
+ES_COMPARING_PARAMETER_STRING_WITH_EQ,com.sample.service.AuthenticationService,weakPasswordCheck,True Positive
+ES_COMPARING_PARAMETER_STRING_WITH_EQ,com.sample.service.EmployeeService,belongsToDepartment,True Positive
+DM_DEFAULT_ENCODING,com.sample.service.ReportService,generateEmployeeReport,False Positive
+OBL_UNSATISFIED_OBLIGATION,com.sample.service.ReportService,generateEmployeeReport,True Positive
+OS_OPEN_STREAM,com.sample.service.ReportService,generateEmployeeReport,True Positive
+DM_DEFAULT_ENCODING,com.sample.util.FileUtil,readFirstLine,False Positive
+ES_COMPARING_STRINGS_WITH_EQ,com.sample.util.FileUtil,isCsvFile,True Positive
+OS_OPEN_STREAM,com.sample.util.FileUtil,readFirstLine,True Positive
+RV_RETURN_VALUE_IGNORED,com.sample.util.FileUtil,normalizeInput,True Positive

@@ -1,0 +1,25 @@
+[ {
+  "bugType" : "ES_COMPARING_PARAMETER_STRING_WITH_EQ",
+  "className" : "com.sample.BuggyExample",
+  "methodName" : "compareStrings",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "OBL_UNSATISFIED_OBLIGATION",
+  "className" : "com.sample.BuggyExample",
+  "methodName" : "openFile",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+}, {
+  "bugType" : "OS_OPEN_STREAM",
+  "className" : "com.sample.BuggyExample",
+  "methodName" : "openFile",
+  "llmClassification" : "True Positive",
+  "llmConfidence" : 0.9,
+  "developerDecision" : "True Positive",
+  "notes" : "Prototype developer feedback: accepted LLM classification."
+} ]

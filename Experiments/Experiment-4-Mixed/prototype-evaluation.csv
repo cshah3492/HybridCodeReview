@@ -1,0 +1,4 @@
+bugType,className,methodName,groundTruth,llmPrediction,confidence,result
+"ES_COMPARING_PARAMETER_STRING_WITH_EQ","com.sample.BuggyExample","compareStrings","False Positive","True Positive",0.9,"False Positive (FP)"
+"OBL_UNSATISFIED_OBLIGATION","com.sample.BuggyExample","openFile","True Positive","True Positive",0.9,"True Positive (TP)"
+"OS_OPEN_STREAM","com.sample.BuggyExample","openFile","True Positive","False Positive",0.9,"False Negative (FN)"
