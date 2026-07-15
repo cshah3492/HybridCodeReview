@@ -43,4 +43,73 @@ public class PromptBuilder {
 
         return prompt.toString();
     }
+    
+    public String buildStandalonePrompt(
+            Finding finding,
+            String sourceContext
+    ) {
+        StringBuilder prompt = new StringBuilder();
+
+        prompt.append(
+                "You are an independent Java software quality "
+                + "and security reviewer.\n\n"
+        );
+
+        prompt.append("Review the following Java source-code context.\n");
+        prompt.append(
+                "Determine whether the code contains a genuine "
+                + "software quality or security defect at or near "
+                + "the identified class and method.\n\n"
+        );
+
+        prompt.append("Class: ")
+              .append(finding.getClassName())
+              .append("\n");
+
+        prompt.append("Method: ")
+              .append(finding.getMethodName())
+              .append("\n");
+
+        prompt.append("Source File: ")
+              .append(finding.getSourceFile())
+              .append("\n\n");
+
+        prompt.append("Source-Code Context:\n");
+        prompt.append(sourceContext);
+        prompt.append("\n");
+
+        prompt.append("Instructions:\n");
+        prompt.append(
+                "- Do not assume that a defect exists merely because "
+                + "this code was selected for review.\n"
+        );
+        prompt.append(
+                "- Base the classification only on the supplied "
+                + "source code.\n"
+        );
+        prompt.append(
+                "- Classify the code as True Positive only when a "
+                + "specific defect is identifiable.\n"
+        );
+        prompt.append(
+                "- Otherwise classify it as False Positive.\n\n"
+        );
+
+        prompt.append("Return only JSON in this format:\n");
+        prompt.append("{\n");
+        prompt.append(
+                "  \"classification\": "
+                + "\"True Positive or False Positive\",\n"
+        );
+        prompt.append("  \"confidence\": 0.0,\n");
+        prompt.append(
+                "  \"reasoning\": \"short technical explanation\",\n"
+        );
+        prompt.append(
+                "  \"recommendation\": \"recommended fix or no change\"\n"
+        );
+        prompt.append("}\n");
+
+        return prompt.toString();
+    }
 }

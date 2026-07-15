@@ -13,15 +13,27 @@ import com.prototype.statistics.LearningStatistics;
 import com.prototype.statistics.MetricsCalculator;
 import com.prototype.statistics.PerformanceStatistics;
 import com.prototype.util.OutputManager;
+import com.prototype.model.EvaluationMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class PrototypeRunner {
 
 
-    private final String spotBugsXmlPath ="C:/Users/chira/eclipse-workspace/BuggyJavaProjectV2/target/spotbugsXml.xml";
+ //   private final String spotBugsXmlPath ="C:/Users/chira/eclipse-workspace/spark/target/spotbugsXml.xml";
+	
+	private static final String SPOTBUGS_XML_PATH = "C:/Users/chira/eclipse-workspace/spark/target/spotbugsXml.xml";
+
+	private static final String SPARK_SOURCE_ROOT =  "C:/Users/chira/eclipse-workspace/spark/src/main/java";
+
+	private static final String GROUND_TRUTH_PATH =  "ground-truth-spark.csv";
+	
+	private final SourceContextExtractor sourceContextExtractor = new SourceContextExtractor(SPARK_SOURCE_ROOT);
     
+	private final String spotBugsXmlPath = SPOTBUGS_XML_PATH;
+	
     private final OutputManager outputManager = new OutputManager();
 
     private final SpotBugsParser parser = new SpotBugsParser();
@@ -29,7 +41,8 @@ public class PrototypeRunner {
     private final PromptBuilder promptBuilder = new PromptBuilder();
     private final OpenAIClient llmClient = new OpenAIClient();
     private final ObjectMapper mapper = new ObjectMapper();
-    private final GroundTruthStore groundTruthStore = new GroundTruthStore("ground-truth-v2.csv");
+//    private final GroundTruthStore groundTruthStore = new GroundTruthStore("ground-truth-spark.csv");
+    private final GroundTruthStore groundTruthStore = new GroundTruthStore(GROUND_TRUTH_PATH);
 
     private final LearningStatistics learningStatistics = new LearningStatistics();
     private final PerformanceStatistics performance = new PerformanceStatistics();
@@ -41,8 +54,9 @@ public class PrototypeRunner {
     private int fp = 0;
     private int fn = 0;
 
-    public void run() {
-        System.out.println("Hybrid Code Review Prototype Started");
+    public void run(EvaluationMode mode) {
+        System.out.println("Code Review Evaluation Started");
+        System.out.println("Evaluation Mode: " + mode);
 
         long totalStartTime = System.currentTimeMillis();
 
@@ -59,29 +73,49 @@ public class PrototypeRunner {
             return;
         }
 
-        processFindings(findings);
+        processFindings(findings,mode);
 
         generateReports(findings);
 
-        printStatistics(totalStartTime);
+        printStatistics(totalStartTime, mode);
 
-        System.out.println("\nHybrid Code Review Prototype Completed");
+        System.out.println("\"\\nCode Review Evaluation Completed\"");
     }
 
-    private void processFindings(List<Finding> findings) {
+    private void processFindings(List<Finding> findings, EvaluationMode mode) {
+    	
         for (Finding finding : findings) {
+        	String groundTruth = groundTruthStore.getLabel(finding);
+
+        	if ("Manual Review".equalsIgnoreCase(groundTruth)) {
+        	    continue;
+        	}
             learningStatistics.incrementTotalFindingsAnalyzed();
 
             System.out.println("\n===== STATIC FINDING =====");
             System.out.println(finding);
 
-            List<String> priorFeedback = feedbackStore.findRelevantFeedback(finding);
+            String prompt;
 
-            if (priorFeedback != null && !priorFeedback.isEmpty()) {
-                learningStatistics.incrementFindingsUsingPriorFeedback();
-            }
+			if (mode == EvaluationMode.HYBRID) {
+				List<String> priorFeedback = feedbackStore.findRelevantFeedback(finding);
 
-            String prompt = promptBuilder.buildPrompt(finding, priorFeedback);
+				if (priorFeedback != null && !priorFeedback.isEmpty()) {
+					learningStatistics.incrementFindingsUsingPriorFeedback();
+				}
+
+				prompt = promptBuilder.buildPrompt(finding, priorFeedback);
+
+			} else {
+				String sourceContext = sourceContextExtractor.extract(finding);
+
+				prompt = promptBuilder.buildStandalonePrompt(finding, sourceContext);
+			}
+			
+//			if (mode == EvaluationMode.STANDALONE_LLM) {
+//			    System.out.println("\n===== STANDALONE PROMPT =====");
+//			    System.out.println(prompt);
+//			}
 
             long llmStartTime = System.currentTimeMillis();
             OpenAIResponse openAIResponse = llmClient.analyzeFinding(prompt);
@@ -104,8 +138,6 @@ public class PrototypeRunner {
 //                }
                 // ===========================================================
 
-                String groundTruth = groundTruthStore.getLabel(finding);
-
                 updateMetrics(result.getClassification(), groundTruth);
 
                 addEvaluationRecord(finding, result, groundTruth);
@@ -124,12 +156,15 @@ public class PrototypeRunner {
                 System.out.println("Reasoning      : " + result.getReasoning());
                 System.out.println("Recommendation : " + result.getRecommendation());
 
-                feedbackStore.saveFeedback(
-                        finding,
-                        result,
-                        result.getClassification(),
-                        "Prototype developer feedback: accepted LLM classification."
-                );
+                if (mode == EvaluationMode.HYBRID) {
+                    feedbackStore.saveFeedback(
+                            finding,
+                            result,
+                            result.getClassification(),
+                            "Prototype developer feedback: "
+                            + "accepted LLM classification."
+                    );
+                }
 
             } catch (Exception e) {
                 System.err.println("Error parsing LLM response: " + e.getMessage());
@@ -171,22 +206,27 @@ public class PrototypeRunner {
         csvReportGenerator.generateCsv(evaluationRecords);
     }
 
-    private void printStatistics(long totalStartTime) {
-        MetricsCalculator calculator = new MetricsCalculator();
-        calculator.calculate(tp, fp, fn);
+	private void printStatistics(long totalStartTime, EvaluationMode mode) {
+		MetricsCalculator calculator = new MetricsCalculator();
 
-        learningStatistics.setTotalFeedbackRecords(feedbackStore.getTotalFeedbackRecords());
-        learningStatistics.printStatistics();
+		calculator.calculate(tp, fp, fn);
 
-        long totalEndTime = System.currentTimeMillis();
-        performance.setTotalExecutionTime(totalEndTime - totalStartTime);
-        performance.printStatistics();
+		if (mode == EvaluationMode.HYBRID) {
+			learningStatistics.setTotalFeedbackRecords(feedbackStore.getTotalFeedbackRecords());
+			learningStatistics.printStatistics();
+		}
 
-        costStatistics.printStatistics();
+		long totalEndTime = System.currentTimeMillis();
 
-        PrototypeSummary prototypeSummary = new PrototypeSummary();
-        prototypeSummary.printSummary();
-    }
+		performance.setTotalExecutionTime(totalEndTime - totalStartTime);
+
+		performance.printStatistics();
+		costStatistics.printStatistics();
+
+		PrototypeSummary prototypeSummary = new PrototypeSummary();
+
+		prototypeSummary.printSummary(mode);
+	}
 
 	private String getEvaluationResult(String prediction, String groundTruth) {
 
